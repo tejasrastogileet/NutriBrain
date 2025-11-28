@@ -22,7 +22,7 @@ interface PersonalInfo {
   goal: string;
   dietaryRestrictions: string[];
   allergies: string[];
-  targetCalories: string; // Calculated automatically based on user data
+  targetCalories: string;
 }
 
 interface PersonalInfoModalProps {
@@ -47,7 +47,7 @@ const PersonalInfoModal: React.FC<PersonalInfoModalProps> = ({
     goal: '',
     dietaryRestrictions: [],
     allergies: [],
-    targetCalories: '', // This will be calculated automatically
+    targetCalories: '',
   });
 
   const [dietaryRestrictionInput, setDietaryRestrictionInput] = useState('');
@@ -103,7 +103,6 @@ const PersonalInfoModal: React.FC<PersonalInfoModalProps> = ({
   };
 
   const handleComplete = () => {
-    // Validate required fields
     if (!personalInfo.name || !personalInfo.age || !personalInfo.gender || 
         !personalInfo.weight || !personalInfo.height || !personalInfo.activityLevel || 
         !personalInfo.goal) {
@@ -111,7 +110,6 @@ const PersonalInfoModal: React.FC<PersonalInfoModalProps> = ({
       return;
     }
 
-    // Always calculate target calories automatically
     const calculatedCalories = calculateTargetCalories();
     const finalPersonalInfo = { 
       ...personalInfo, 
@@ -126,11 +124,9 @@ const PersonalInfoModal: React.FC<PersonalInfoModalProps> = ({
     const weight = parseFloat(personalInfo.weight);
     const height = parseFloat(personalInfo.height);
     
-    // Basic BMR calculation (Mifflin-St Jeor Equation)
     let bmr = 10 * weight + 6.25 * height - 5 * age;
     bmr = personalInfo.gender === 'male' ? bmr + 5 : bmr - 161;
     
-    // Activity multiplier
     const activityMultipliers = {
       sedentary: 1.2,
       lightly_active: 1.375,
@@ -141,16 +137,15 @@ const PersonalInfoModal: React.FC<PersonalInfoModalProps> = ({
     
     let tdee = bmr * activityMultipliers[personalInfo.activityLevel as keyof typeof activityMultipliers];
     
-    // Goal adjustment
     switch (personalInfo.goal) {
       case 'lose_weight':
-        tdee -= 500; // 500 calorie deficit
+        tdee -= 500;
         break;
       case 'gain_weight':
-        tdee += 300; // 300 calorie surplus
+        tdee += 300;
         break;
       case 'build_muscle':
-        tdee += 200; // 200 calorie surplus
+        tdee += 200;
         break;
     }
     

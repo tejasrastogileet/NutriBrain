@@ -15,7 +15,6 @@ import { LineChart } from 'react-native-chart-kit';
 
 const { width } = Dimensions.get('window');
 
-// Stats Screen Component
 const StatsScreen = () => {
   const [selectedView, setSelectedView] = useState('Grid');
   const { nutritionalData, getTotalNutrition } = useMealPlan();

@@ -14,7 +14,6 @@ import {
 
 const { width } = Dimensions.get("window");
 
-// Home Screen Component
 const HomeScreen = ({ onNavigate }: { onNavigate?: (tab: string) => void }) => {
   const [selectedView, setSelectedView] = useState("Daily");
   const { meals, nutritionalData, getTotalNutrition, personalInfo } =

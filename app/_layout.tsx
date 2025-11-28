@@ -18,7 +18,6 @@ export default function RootLayout() {
   });
 
   useEffect(() => {
-    // Try to read GEMINI_API_KEY from expo extra (app.config.js / app.json extra)
     try {
       const extra = (Constants.expoConfig && (Constants.expoConfig.extra as any)) || (Constants.manifest && (Constants.manifest.extra as any));
       const geminiKey = extra?.GEMINI_API_KEY;
@@ -31,12 +30,10 @@ export default function RootLayout() {
         }
       }
     } catch (e) {
-      // ignore - optional feature
     }
   }, []);
 
   if (!loaded) {
-    // Async font loading only occurs in development.
     return null;
   }
 

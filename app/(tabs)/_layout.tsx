@@ -26,12 +26,10 @@ export default function TabLayout() {
 
   return (
     <View style={styles.container}>
-      {/* Screen Content */}
       <View style={styles.content}>
         {renderScreen()}
       </View>
       
-      {/* Custom Bottom Navigation */}
       <CustomBottomNav
         items={NAV_ITEMS}
         activeTab={activeTab}
@@ -41,7 +39,6 @@ export default function TabLayout() {
   );
 }
 
-// Import the screen components
 import HomeScreen from './index';
 import MealsScreen from './meals';
 import ProfileScreen from './profile';

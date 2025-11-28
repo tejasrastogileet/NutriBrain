@@ -36,7 +36,7 @@ interface PersonalInfo {
   goal: string;
   dietaryRestrictions: string[];
   allergies: string[];
-  targetCalories: string; // Calculated automatically based on user data
+  targetCalories: string;
 }
 
 interface MealPlanContextType {
@@ -98,24 +98,22 @@ export const MealPlanProvider: React.FC<MealPlanProviderProps> = ({ children }) 
     fat: 65,
   });
 
-  // Calculate target nutrition based on personal info
   const calculateTargetNutrition = (personalInfo: PersonalInfo): NutritionalData => {
     const targetCalories = parseInt(personalInfo.targetCalories);
     
-    // Calculate macronutrient ratios based on goal
-    let proteinRatio = 0.25; // 25% default
-    let carbsRatio = 0.55;   // 55% default
-    let fatRatio = 0.20;     // 20% default
+    let proteinRatio = 0.25;
+    let carbsRatio = 0.55;
+    let fatRatio = 0.20;
     
     switch (personalInfo.goal) {
       case 'lose_weight':
-        proteinRatio = 0.30; // Higher protein for satiety
+        proteinRatio = 0.30; 
         carbsRatio = 0.45;
         fatRatio = 0.25;
         break;
       case 'gain_weight':
       case 'build_muscle':
-        proteinRatio = 0.30; // Higher protein for muscle building
+        proteinRatio = 0.30; 
         carbsRatio = 0.50;
         fatRatio = 0.20;
         break;
@@ -131,7 +129,6 @@ export const MealPlanProvider: React.FC<MealPlanProviderProps> = ({ children }) 
         break;
     }
     
-    // Calculate grams (1g protein = 4 cal, 1g carbs = 4 cal, 1g fat = 9 cal)
     const proteinGrams = Math.round((targetCalories * proteinRatio) / 4);
     const carbsGrams = Math.round((targetCalories * carbsRatio) / 4);
     const fatGrams = Math.round((targetCalories * fatRatio) / 9);
@@ -147,7 +144,6 @@ export const MealPlanProvider: React.FC<MealPlanProviderProps> = ({ children }) 
   const [personalInfo, setPersonalInfo] = useState<PersonalInfo | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  // Load data on app start
   useEffect(() => {
     loadInitialData();
   }, []);
@@ -156,14 +152,12 @@ export const MealPlanProvider: React.FC<MealPlanProviderProps> = ({ children }) 
     try {
       setIsLoading(true);
       
-      // Load personal info
       const savedPersonalInfo = await StorageService.getPersonalInfo();
       if (savedPersonalInfo) {
         setPersonalInfo(savedPersonalInfo);
-        setNutritionalData(calculateTargetNutrition(savedPersonalInfo)); // Update nutritional data on load
+        setNutritionalData(calculateTargetNutrition(savedPersonalInfo));
       }
 
-      // Load meals
       const savedMeals = await StorageService.getMeals();
       if (savedMeals) {
         setMeals(savedMeals);
@@ -237,7 +231,7 @@ export const MealPlanProvider: React.FC<MealPlanProviderProps> = ({ children }) 
     try {
       await StorageService.savePersonalInfo(info);
       setPersonalInfo(info);
-      setNutritionalData(calculateTargetNutrition(info)); // Update nutritional data on save
+      setNutritionalData(calculateTargetNutrition(info));
     } catch (error) {
       console.error('Error saving personal info:', error);
       throw error;
@@ -290,7 +284,6 @@ export const MealPlanProvider: React.FC<MealPlanProviderProps> = ({ children }) 
     }
   };
 
-  // Auto-save meals when they change
   useEffect(() => {
     if (!isLoading) {
       saveMealsToStorage();

@@ -10,7 +10,7 @@ interface PersonalInfo {
   goal: string;
   dietaryRestrictions: string[];
   allergies: string[];
-  targetCalories: string; // Calculated automatically based on user data
+  targetCalories: string;
 }
 
 interface Meal {
@@ -24,7 +24,6 @@ interface Meal {
 class StorageService {
   private static instance: StorageService;
   
-  // Storage keys
   private readonly PERSONAL_INFO_KEY = 'personal_info';
   private readonly MEALS_KEY = 'meals_data';
   private readonly GEMINI_API_KEY = 'gemini_api_key';
@@ -40,7 +39,6 @@ class StorageService {
     return StorageService.instance;
   }
 
-  // Personal Information Storage
   async savePersonalInfo(personalInfo: PersonalInfo): Promise<void> {
     try {
       await SecureStore.setItemAsync(this.PERSONAL_INFO_KEY, JSON.stringify(personalInfo));
@@ -67,7 +65,6 @@ class StorageService {
     }
   }
 
-  // Meals Data Storage
   async saveMeals(meals: Meal[]): Promise<void> {
     try {
       await SecureStore.setItemAsync(this.MEALS_KEY, JSON.stringify(meals));
@@ -94,7 +91,6 @@ class StorageService {
     }
   }
 
-  // Gemini API Key Storage
   async saveGeminiApiKey(apiKey: string): Promise<void> {
     try {
       await SecureStore.setItemAsync(this.GEMINI_API_KEY, apiKey);
@@ -120,7 +116,6 @@ class StorageService {
     }
   }
 
-  // First Time User Flag
   async setFirstTimeUser(isFirstTime: boolean): Promise<void> {
     try {
       await SecureStore.setItemAsync(this.FIRST_TIME_USER, JSON.stringify(isFirstTime));
@@ -139,7 +134,6 @@ class StorageService {
     }
   }
 
-  // Clear All Data
   async clearAllData(): Promise<void> {
     try {
       await Promise.all([
@@ -153,7 +147,6 @@ class StorageService {
     }
   }
 
-  // Export Data (for backup purposes)
   async exportData(): Promise<{
     personalInfo: PersonalInfo | null;
     meals: Meal[] | null;
@@ -181,7 +174,6 @@ class StorageService {
     }
   }
 
-  // Import Data (for restore purposes)
   async importData(data: {
     personalInfo?: PersonalInfo;
     meals?: Meal[];
@@ -208,7 +200,6 @@ class StorageService {
     }
   }
 
-  // Check if user has completed setup
   async hasCompletedSetup(): Promise<boolean> {
     try {
       const personalInfo = await this.getPersonalInfo();
@@ -219,7 +210,6 @@ class StorageService {
     }
   }
 
-  // Get storage statistics
   async getStorageStats(): Promise<{
     hasPersonalInfo: boolean;
     hasMeals: boolean;
@@ -251,7 +241,6 @@ class StorageService {
     }
   }
 
-  // Theme Management
   async setTheme(theme: 'light' | 'dark'): Promise<void> {
     try {
       await SecureStore.setItemAsync(this.THEME_KEY, theme);

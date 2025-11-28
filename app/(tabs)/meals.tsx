@@ -131,7 +131,6 @@ const MealsScreen = () => {
         [
           { text: 'Cancel', style: 'cancel' },
           { text: 'Go to Settings', onPress: () => {
-            // Navigate to settings
           }},
         ]
       );
@@ -614,7 +613,6 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
     fontWeight: '700',
   },
-  // Modal styles
   modalContainer: {
     flex: 1,
     backgroundColor: '#F7F8FA',

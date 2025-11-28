@@ -36,7 +36,7 @@ interface PersonalInfo {
   goal: string;
   dietaryRestrictions: string[];
   allergies: string[];
-  targetCalories: string; // Calculated automatically based on user data
+  targetCalories: string;
 }
 
 interface AIFoodRecommendationProps {
@@ -78,7 +78,6 @@ const AIFoodRecommendation: React.FC<AIFoodRecommendationProps> = ({
     const apiKey = await StorageService.getGeminiApiKey();
     setHasApiKey(!!apiKey);
 
-    // If we have an API key, configure the service
     if (apiKey) {
       try {
         GeminiService.setApiKey(apiKey);
@@ -95,7 +94,6 @@ const AIFoodRecommendation: React.FC<AIFoodRecommendationProps> = ({
   };
 
   const handleGenerateRecommendations = async () => {
-    // First check if user has completed setup
     if (!hasCompletedSetup || !personalInfo) {
       Alert.alert(
         "Profile Setup Required",
@@ -111,7 +109,6 @@ const AIFoodRecommendation: React.FC<AIFoodRecommendationProps> = ({
       return;
     }
 
-    // Then check if API key is set
     if (!hasApiKey) {
       Alert.alert(
         "API Key Required",
@@ -122,7 +119,6 @@ const AIFoodRecommendation: React.FC<AIFoodRecommendationProps> = ({
             text: "Go to Settings",
             onPress: () => {
               onClose();
-              // Navigate to settings (you'll need to implement this)
             },
           },
         ]
@@ -130,19 +126,16 @@ const AIFoodRecommendation: React.FC<AIFoodRecommendationProps> = ({
       return;
     }
 
-    // Generate recommendations
     await generateRecommendations();
   };
 
   const handlePersonalInfoComplete = async (info: PersonalInfo) => {
     try {
-      // Save personal info
       await StorageService.savePersonalInfo(info);
       setPersonalInfo(info);
       setHasCompletedSetup(true);
       setShowPersonalInfoModal(false);
 
-      // Check API key again
       await checkApiKey();
 
       if (!hasApiKey) {
@@ -155,7 +148,6 @@ const AIFoodRecommendation: React.FC<AIFoodRecommendationProps> = ({
               text: "Go to Settings",
               onPress: () => {
                 onClose();
-                // Navigate to settings
               },
             },
           ]
@@ -163,7 +155,6 @@ const AIFoodRecommendation: React.FC<AIFoodRecommendationProps> = ({
         return;
       }
 
-      // Generate recommendations automatically after setup
       await generateRecommendations();
     } catch (error) {
       console.error("Error saving personal info:", error);
@@ -203,7 +194,6 @@ const AIFoodRecommendation: React.FC<AIFoodRecommendationProps> = ({
                 text: "Go to Settings",
                 onPress: () => {
                   onClose();
-                  // Navigate to settings
                 },
               },
             ]
@@ -222,7 +212,6 @@ const AIFoodRecommendation: React.FC<AIFoodRecommendationProps> = ({
               {
                 text: "Use Fallback",
                 onPress: () => {
-                  // Show fallback recommendations based on meal type
                   const fallbackRecommendations =
                     getFallbackRecommendations(selectedMealType);
                   setRecommendations(fallbackRecommendations);
@@ -239,7 +228,6 @@ const AIFoodRecommendation: React.FC<AIFoodRecommendationProps> = ({
         "Error",
         "Failed to generate AI recommendations. Using fallback options instead."
       );
-      // Show fallback recommendations based on meal type
       const fallbackRecommendations =
         getFallbackRecommendations(selectedMealType);
       setRecommendations(fallbackRecommendations);
@@ -539,7 +527,6 @@ const AIFoodRecommendation: React.FC<AIFoodRecommendationProps> = ({
                 style={styles.setupButton}
                 onPress={() => {
                   onClose();
-                  // Navigate to settings
                 }}
               >
                 <Ionicons name="key" size={20} color="white" />
@@ -623,7 +610,6 @@ const AIFoodRecommendation: React.FC<AIFoodRecommendationProps> = ({
       onRequestClose={onClose}
     >
       <SafeAreaView style={styles.container}>
-        {/* Header */}
         <View style={styles.modalHeader}>
           <TouchableOpacity onPress={onClose}>
             <Ionicons name="close" size={24} color="#333" />
@@ -632,7 +618,6 @@ const AIFoodRecommendation: React.FC<AIFoodRecommendationProps> = ({
           <View />
         </View>
 
-        {/* Content */}
         {renderContent()}
       </SafeAreaView>
     </Modal>

@@ -35,7 +35,6 @@ const SettingsScreen = () => {
 
   useEffect(() => {
     loadSettings();
-    // Sync darkModeEnabled with actual theme
     setDarkModeEnabled(theme === 'dark');
   }, [theme]);
 
@@ -49,7 +48,6 @@ const SettingsScreen = () => {
       const stats = await StorageService.getStorageStats();
       setStorageStats(stats);
 
-      // Check if an embedded GEMINI_API_KEY is provided via expo.extra
       try {
         const extra = (Constants.expoConfig && (Constants.expoConfig.extra as any)) || (Constants.manifest && (Constants.manifest.extra as any));
         setConfigHasGeminiKey(!!extra?.GEMINI_API_KEY);
@@ -114,7 +112,6 @@ const SettingsScreen = () => {
           style: 'destructive', 
           onPress: async () => {
             try {
-              // Show loading state
               Alert.alert(
                 'Clearing Data...',
                 'Please wait while we clear all localStorage data.',
@@ -122,18 +119,14 @@ const SettingsScreen = () => {
                 { cancelable: false }
               );
               
-              // Clear all data from localStorage
               await StorageService.clearAllData();
               
-              // Clear context state
               clearPersonalInfo();
               clearAllMeals();
               setGeminiApiKey('');
               
-              // Reload settings to reflect changes
               await loadSettings();
               
-              // Show success message
               Alert.alert(
                 'Data Cleared Successfully!',
                 'All localStorage data has been permanently deleted. The app has been reset to its initial state.',
@@ -141,7 +134,6 @@ const SettingsScreen = () => {
                   {
                     text: 'OK',
                     onPress: () => {
-                      // Optionally navigate to home or show setup screen
                     }
                   }
                 ]
@@ -348,7 +340,6 @@ const SettingsScreen = () => {
             title="Personal Information"
             subtitle={storageStats.hasPersonalInfo ? "Profile completed" : "No profile data"}
             onPress={() => {
-              // Navigate to profile setup
             }}
           />
           <SettingItem
@@ -356,7 +347,6 @@ const SettingsScreen = () => {
             title="Meal Data"
             subtitle={storageStats.hasMeals ? "Meals saved" : "No meal data"}
             onPress={() => {
-              // Show meal data
             }}
           />
         </View>
@@ -461,14 +451,12 @@ const SettingsScreen = () => {
             icon="document-text"
             title="Privacy Policy"
             onPress={() => {
-              // Open privacy policy
             }}
           />
           <SettingItem
             icon="help-circle"
             title="Help & Support"
             onPress={() => {
-              // Open help
             }}
           />
         </View>
@@ -570,7 +558,6 @@ const styles = StyleSheet.create({
     fontWeight: '700',
     color: '#1A1A1A',
   },
-  // Modal styles
   modalContainer: {
     flex: 1,
     backgroundColor: '#F7F8FA',
@@ -709,7 +696,6 @@ const styles = StyleSheet.create({
     fontWeight: '500',
   },
   localStorageItems: {
-    //
   },
   localStorageItem: {
     flexDirection: 'row',

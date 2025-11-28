@@ -10,7 +10,7 @@ interface PersonalInfo {
   goal: string;
   dietaryRestrictions: string[];
   allergies: string[];
-  targetCalories: string; // Calculated automatically based on user data
+  targetCalories: string;
 }
 
 interface FoodItem {
@@ -28,10 +28,7 @@ class GeminiService {
   private model: any = null;
   private apiKey: string | null = null;
 
-  constructor() {
-    // Don't initialize with a placeholder key
-    // The API key will be set when needed
-  }
+  constructor() {}
 
   setApiKey(apiKey: string) {
     if (!apiKey || apiKey.trim() === "") {
@@ -40,7 +37,6 @@ class GeminiService {
 
     this.apiKey = apiKey.trim();
     this.genAI = new GoogleGenerativeAI(this.apiKey);
-    // Use gemini-pro model which is more stable and available
     this.model = this.genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
   }
 
@@ -50,7 +46,6 @@ class GeminiService {
     currentMeals: any[] = []
   ): Promise<FoodItem[]> {
     try {
-      // Check if API key is set
       if (!this.apiKey || !this.model) {
         throw new Error(
           "API key not configured. Please set your Gemini API key in Settings."
@@ -67,13 +62,11 @@ class GeminiService {
     } catch (error) {
       console.error("Error generating meal recommendations:", error);
 
-      // Handle specific error types
       if (error instanceof Error) {
         if (error.message.includes("API key")) {
           throw error;
         }
 
-        // Handle model overload or service unavailable errors
         if (
           error.message.includes("overloaded") ||
           error.message.includes("503") ||
@@ -86,7 +79,6 @@ class GeminiService {
         }
       }
 
-      // For other errors, return fallback recommendations
       return this.getFallbackRecommendations(mealType);
     }
   }
@@ -100,7 +92,6 @@ class GeminiService {
     const remainingCalories =
       parseInt(personalInfo.targetCalories) - currentNutrition.calories;
 
-    // Map meal types to more descriptive names
     const mealTypeDescriptions = {
       breakfast: "breakfast (morning meal)",
       lunch: "lunch (midday meal)",
@@ -210,7 +201,6 @@ Only return the JSON array, no additional text.`;
 
   private parseAIResponse(response: string): FoodItem[] {
     try {
-      // Extract JSON from the response
       const jsonMatch = response.match(/\[[\s\S]*\]/);
       if (jsonMatch) {
         const parsed = JSON.parse(jsonMatch[0]);
@@ -398,12 +388,10 @@ Only return the JSON array, no additional text.`;
     }));
   }
 
-  // Check if API key is configured
   isApiKeyConfigured(): boolean {
     return !!this.apiKey && !!this.model;
   }
 
-  // Get the current API key (for debugging)
   getApiKey(): string | null {
     return this.apiKey;
   }
